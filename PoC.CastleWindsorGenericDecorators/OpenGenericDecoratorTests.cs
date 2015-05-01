@@ -15,16 +15,16 @@ namespace PoC.CastleWindsorGenericDecorators
             var container = new WindsorContainer();
             container.Register(
                 Component.For(typeof(IHandle<>)).ImplementedBy(typeof(LoggingHandler<>)),
-                Component.For<IHandle<PlayEvent>>().ImplementedBy<PlayEventHandler>()
+                Component.For<IHandle<CopyFile>>().ImplementedBy<CopyFileHandler>()
             );
 
-            var handlers = container.ResolveAll<IHandle<PlayEvent>>();
+            var handlers = container.ResolveAll<IHandle<CopyFile>>();
 
             for (int i = 0; i < handlers.Length; i++)
             {
                 var handler = handlers[i];
                 Console.WriteLine(string.Format("## Handler {0}: {1}", i+1, handler.GetType().Name));
-                handler.Handle(new PlayEvent());
+                handler.Handle(new CopyFile());
                 Console.WriteLine();
             }
 
@@ -32,10 +32,10 @@ namespace PoC.CastleWindsorGenericDecorators
         }
     }
 
-    public interface IHandle<in T>
-    {
-        void Handle(T message);
-    }
+public interface IHandle<in T>
+{
+    void Handle(T message);
+}
 
     public class LoggingHandler<T> : IHandle<T>
     {
@@ -54,13 +54,13 @@ namespace PoC.CastleWindsorGenericDecorators
         }
     }
 
-    public class PlayEventHandler : IHandle<PlayEvent>
+    public class CopyFileHandler : IHandle<CopyFile>
     {
-        public void Handle(PlayEvent message)
+        public void Handle(CopyFile message)
         {
-            Console.WriteLine("PlayEventHandler.Handle");
+            Console.WriteLine("CopyFileHandler.Handle");
         }
     }
 
-    public class PlayEvent { }
+    public class CopyFile { }
 }
